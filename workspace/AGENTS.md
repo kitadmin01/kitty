@@ -23,6 +23,14 @@
 - Social media metrics → SQLite: `~/kitty-data/metrics.db`
 - Token/cost tracking → SQLite: `~/kitty-data/usage.db`
 
+## Search Rules
+- **Always use Google via browser** for web searches (free, no API cost)
+- Open `https://www.google.com/search?q=URL_ENCODED_QUERY` then snapshot the results
+- When James asks you to research something on Telegram, figure out the right Google query yourself
+- When running scheduled tasks (LinkedIn posts, tweets, lead research), build queries based on the task context
+- Read 2-3 top results for quality content — don't just use snippets
+- Only fall back to SERP Search API if Google shows CAPTCHAs or browser fails
+
 ## Browser Tool Rules
 - To READ page content: use `action="snapshot"` (NEVER use act:evaluate for reading)
 - To OPEN a URL: use `action="open"` with `targetUrl`

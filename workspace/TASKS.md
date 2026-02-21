@@ -12,7 +12,7 @@ Generate and send to Telegram:
 - Alerts & recommendations: urgent items, strategy suggestions
 
 ### 2. LinkedIn Personal Post (9:00 AM)
-- Search trending Web3/blockchain news using SERP Search
+- Search trending Web3/blockchain news via Google (browser)
 - Write engaging post with 3-5 hashtags (#Web3 #Blockchain #Analytics #DeFi #Marketing)
 - Post to James's personal profile: https://www.linkedin.com/in/james-williams-91381416/
 - Log post content and URL to ~/kitty-data/logs/
@@ -43,7 +43,7 @@ Generate and send to Telegram:
 - If rate-limited: reduce frequency, alert James on Telegram
 
 ### 7. Lead Research & Email Outreach (10:00 AM)
-- Search LinkedIn, Twitter, and web for Web3 marketing companies and professionals
+- Search Google, LinkedIn, and Twitter via browser for Web3 marketing companies and professionals
 - Collect 10-20 new leads: name, email, company, LinkedIn URL, Twitter handle
 - Store in CRM: ~/kitty-data/crm.db
 - Draft personalized outreach emails (use GPT-4o for quality)

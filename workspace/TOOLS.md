@@ -1,9 +1,35 @@
 # TOOLS.md - Kitty's Tool Notes
 
-## SERP Search
-- Web search for current information (Web3 news, trending topics, lead research)
-- API key configured in openclaw.json via `${SERP_SEARCH_API_KEY}`
-- Cache results within 24 hours to conserve queries
+## Web Search — USE GOOGLE VIA BROWSER (free)
+
+### How to search
+1. Open Google: `{ "action": "open", "targetUrl": "https://www.google.com/search?q=YOUR+QUERY+HERE", "profile": "openclaw" }`
+2. Snapshot the results: `{ "action": "snapshot", "profile": "openclaw" }`
+3. Read the results from the snapshot. Click into articles if you need more detail.
+
+### Building good search queries
+- **For tasks** (LinkedIn posts, tweets, YouTube topics): search for current news/trends
+  - LinkedIn post → `"Web3 analytics trends 2026"`, `"blockchain marketing news today"`
+  - Twitter content → `"DeFi news today"`, `"crypto market update"`
+  - YouTube research → `"Web3 analytics tutorial"`, `"blockchain marketing strategies"`
+  - Lead research → `"Web3 marketing agency"`, `"blockchain marketing company contact"`
+- **For James's Telegram requests**: interpret what he asks and build an appropriate query
+  - "What's happening in DeFi?" → search `"DeFi news today"`
+  - "Find me companies doing Web3 marketing" → search `"top Web3 marketing agencies 2026"`
+  - "Research AnalyticKit competitors" → search `"Web3 analytics platforms comparison"`
+  - Any topic James mentions → search Google, read top results, summarize back
+
+### Tips
+- Add the current year to queries for fresh results (e.g., `"Web3 trends 2026"`)
+- For news: add `"today"` or `"this week"` to the query
+- For leads: add `"contact"` or `"email"` to find outreach targets
+- If first results aren't good enough, refine the query and search again
+- Click into 2-3 top results and snapshot each for deeper content
+
+### SERP Search API (backup only)
+- Only use if Google shows CAPTCHAs or browser search fails
+- API key configured via `${SERP_SEARCH_API_KEY}`
+- Costs money per query — avoid unless browser search is broken
 
 ## Browser (Chromium) — IMPORTANT USAGE GUIDE
 
