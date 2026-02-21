@@ -1,0 +1,34 @@
+# Secrets — NEVER commit
+.env
+*.env
+secrets/
+
+# Browser profiles (large + session cookies)
+browser/
+browser-profile/
+
+# Session data & memory
+agents/*/sessions/
+memory/
+*.sqlite
+
+# Runtime
+sandboxes/
+*.lock
+SingletonLock
+
+# Databases with PII
+crm.db
+metrics.db
+usage.db
+
+# Node
+node_modules/
+package-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local
+.claude/
