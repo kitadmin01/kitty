@@ -24,14 +24,12 @@
 - Token/cost tracking → SQLite: `~/kitty-data/usage.db`
 
 ## Search Rules
-- **Always use Bing via browser** for web searches (free, no API cost)
-- Google and DuckDuckGo block headless browsers — **do NOT use them**
-- Open `https://www.bing.com/search?q=YOUR+QUERY` then snapshot the results
-- **Always put the query in the URL** — do NOT open bing.com and try to type into it
-- When James asks you to research something on Telegram, build the right Bing search URL yourself
-- When running scheduled tasks (LinkedIn posts, tweets, lead research), build queries based on the task context
-- Read 2-3 top results for quality content — don't just use snippets
-- Only fall back to SERP Search API if Bing also starts blocking
+- **Use SerpAPI via exec tool** for all web searches — do NOT use browser for searching (Google/Bing/DuckDuckGo all block headless browsers)
+- Run: `curl -s "https://serpapi.com/search.json?engine=google&q=QUERY&num=10&api_key=${SERP_SEARCH_API_KEY}" | python3 -c "import sys,json; data=json.load(sys.stdin); [print(f\"Title: {r.get('title')}\nURL: {r.get('link')}\nSnippet: {r.get('snippet','')}\n\") for r in data.get('organic_results',[])]"`
+- When James asks you to research something on Telegram, build the right search query yourself
+- When running scheduled tasks, build queries based on the task context
+- After getting SerpAPI results, use the **browser** to open article URLs and snapshot for full content
+- SerpAPI has 100 searches/month — don't waste on duplicate queries
 
 ## Browser Tool Rules
 - To READ page content: use `action="snapshot"` (NEVER use act:evaluate for reading)

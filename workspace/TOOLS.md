@@ -1,42 +1,50 @@
 # TOOLS.md - Kitty's Tool Notes
 
-## Web Search — USE BING VIA BROWSER (free)
+## Web Search — USE SERPAPI VIA EXEC (primary method)
 
-Google and DuckDuckGo block headless browsers with CAPTCHAs. **Use Bing** — it works perfectly.
+Google/DuckDuckGo/Bing all block headless browsers with CAPTCHAs. Do NOT use browser for web searches.
+Use SerpAPI instead — it returns clean Google results via API.
 
 ### How to search
-1. Open Bing with your query in the URL:
-   `{ "action": "open", "targetUrl": "https://www.bing.com/search?q=YOUR+QUERY+HERE", "profile": "openclaw" }`
-2. Snapshot the results: `{ "action": "snapshot", "profile": "openclaw" }`
-3. Read the results from the snapshot. Click into articles if you need deeper content.
+Run this command using the `exec` tool:
+```
+curl -s "https://serpapi.com/search.json?engine=google&q=YOUR+QUERY+HERE&num=10&api_key=${SERP_SEARCH_API_KEY}" | python3 -c "import sys,json; data=json.load(sys.stdin); [print(f\"Title: {r.get('title')}\nURL: {r.get('link')}\nSnippet: {r.get('snippet','')}\n\") for r in data.get('organic_results',[])]"
+```
 
-**IMPORTANT:** Always put the query directly in the URL. Do NOT open bing.com and then try to type — use the URL parameter `?q=` instead.
+Replace spaces with `+` in the query. The command returns titles, URLs, and snippets.
+
+### For deeper content
+After getting search results, use the **browser** to open interesting URLs and snapshot them:
+1. Run SerpAPI search via exec → get URLs
+2. Open a result URL: `{ "action": "open", "targetUrl": "https://example.com/article", "profile": "openclaw" }`
+3. Snapshot to read full content: `{ "action": "snapshot", "profile": "openclaw" }`
 
 ### Building search queries
-Replace spaces with `+` in the URL query parameter.
 
 **For scheduled tasks:**
-- LinkedIn post → `https://www.bing.com/search?q=Web3+analytics+trends+2026`
-- Twitter content → `https://www.bing.com/search?q=DeFi+news+today`
-- YouTube research → `https://www.bing.com/search?q=Web3+analytics+tutorial+2026`
-- Lead research → `https://www.bing.com/search?q=Web3+marketing+agency+contact`
-- News → `https://www.bing.com/news/search?q=blockchain+news+today`
+- LinkedIn post → `q=Web3+analytics+trends+2026`
+- Twitter content → `q=DeFi+news+today`
+- YouTube research → `q=Web3+analytics+tutorial+2026`
+- Lead research → `q=Web3+marketing+agency+contact+email`
+- News → `q=blockchain+crypto+news+today`
 
 **For James's Telegram requests** — interpret what he asks and build the right query:
-- "What's happening in DeFi?" → `https://www.bing.com/search?q=DeFi+news+today`
-- "Find Web3 marketing companies" → `https://www.bing.com/search?q=top+Web3+marketing+agencies+2026`
-- "Research competitors" → `https://www.bing.com/search?q=Web3+analytics+platforms+comparison`
-- Any topic → build a Bing URL, open it, snapshot, read results, summarize back
+- "What's happening in DeFi?" → `q=DeFi+news+today`
+- "Find Web3 marketing companies" → `q=top+Web3+marketing+agencies+2026`
+- "Research competitors" → `q=Web3+analytics+platforms+comparison`
+- Any topic James asks about → build a query, run SerpAPI, summarize results
+
+### For news specifically
+Add `&tbm=nws` to get Google News results:
+```
+curl -s "https://serpapi.com/search.json?engine=google&q=Web3+news&tbm=nws&api_key=${SERP_SEARCH_API_KEY}"
+```
 
 ### Tips
 - Add the current year for fresh results (e.g., `Web3+trends+2026`)
-- For news specifically, use Bing News: `https://www.bing.com/news/search?q=QUERY`
-- Click into 2-3 top result links and snapshot each for deeper content
-- If first results aren't useful, refine the query and search again
-
-### SERP Search API (backup only)
-- Only use if Bing also starts blocking or browser search fails
-- Costs money per query — avoid unless browser search is broken
+- SerpAPI free tier: 100 searches/month — use wisely, don't repeat identical queries
+- Cache/remember results within the same day to avoid duplicate API calls
+- For lead research, combine SerpAPI results with LinkedIn/Twitter browser scraping
 
 ## Browser (Chromium) — IMPORTANT USAGE GUIDE
 
