@@ -12,7 +12,7 @@ Generate and send to Telegram:
 - Alerts & recommendations: urgent items, strategy suggestions
 
 ### 2. LinkedIn Personal Post (9:00 AM)
-- Search trending Web3/blockchain news via Google (browser)
+- Search trending Web3/blockchain news via Bing (browser)
 - Write engaging post with 3-5 hashtags (#Web3 #Blockchain #Analytics #DeFi #Marketing)
 - Post to James's personal profile: https://www.linkedin.com/in/james-williams-91381416/
 - Log post content and URL to ~/kitty-data/logs/

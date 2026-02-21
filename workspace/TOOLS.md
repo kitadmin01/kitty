@@ -1,34 +1,41 @@
 # TOOLS.md - Kitty's Tool Notes
 
-## Web Search — USE GOOGLE VIA BROWSER (free)
+## Web Search — USE BING VIA BROWSER (free)
+
+Google and DuckDuckGo block headless browsers with CAPTCHAs. **Use Bing** — it works perfectly.
 
 ### How to search
-1. Open Google: `{ "action": "open", "targetUrl": "https://www.google.com/search?q=YOUR+QUERY+HERE", "profile": "openclaw" }`
+1. Open Bing with your query in the URL:
+   `{ "action": "open", "targetUrl": "https://www.bing.com/search?q=YOUR+QUERY+HERE", "profile": "openclaw" }`
 2. Snapshot the results: `{ "action": "snapshot", "profile": "openclaw" }`
-3. Read the results from the snapshot. Click into articles if you need more detail.
+3. Read the results from the snapshot. Click into articles if you need deeper content.
 
-### Building good search queries
-- **For tasks** (LinkedIn posts, tweets, YouTube topics): search for current news/trends
-  - LinkedIn post → `"Web3 analytics trends 2026"`, `"blockchain marketing news today"`
-  - Twitter content → `"DeFi news today"`, `"crypto market update"`
-  - YouTube research → `"Web3 analytics tutorial"`, `"blockchain marketing strategies"`
-  - Lead research → `"Web3 marketing agency"`, `"blockchain marketing company contact"`
-- **For James's Telegram requests**: interpret what he asks and build an appropriate query
-  - "What's happening in DeFi?" → search `"DeFi news today"`
-  - "Find me companies doing Web3 marketing" → search `"top Web3 marketing agencies 2026"`
-  - "Research AnalyticKit competitors" → search `"Web3 analytics platforms comparison"`
-  - Any topic James mentions → search Google, read top results, summarize back
+**IMPORTANT:** Always put the query directly in the URL. Do NOT open bing.com and then try to type — use the URL parameter `?q=` instead.
+
+### Building search queries
+Replace spaces with `+` in the URL query parameter.
+
+**For scheduled tasks:**
+- LinkedIn post → `https://www.bing.com/search?q=Web3+analytics+trends+2026`
+- Twitter content → `https://www.bing.com/search?q=DeFi+news+today`
+- YouTube research → `https://www.bing.com/search?q=Web3+analytics+tutorial+2026`
+- Lead research → `https://www.bing.com/search?q=Web3+marketing+agency+contact`
+- News → `https://www.bing.com/news/search?q=blockchain+news+today`
+
+**For James's Telegram requests** — interpret what he asks and build the right query:
+- "What's happening in DeFi?" → `https://www.bing.com/search?q=DeFi+news+today`
+- "Find Web3 marketing companies" → `https://www.bing.com/search?q=top+Web3+marketing+agencies+2026`
+- "Research competitors" → `https://www.bing.com/search?q=Web3+analytics+platforms+comparison`
+- Any topic → build a Bing URL, open it, snapshot, read results, summarize back
 
 ### Tips
-- Add the current year to queries for fresh results (e.g., `"Web3 trends 2026"`)
-- For news: add `"today"` or `"this week"` to the query
-- For leads: add `"contact"` or `"email"` to find outreach targets
-- If first results aren't good enough, refine the query and search again
-- Click into 2-3 top results and snapshot each for deeper content
+- Add the current year for fresh results (e.g., `Web3+trends+2026`)
+- For news specifically, use Bing News: `https://www.bing.com/news/search?q=QUERY`
+- Click into 2-3 top result links and snapshot each for deeper content
+- If first results aren't useful, refine the query and search again
 
 ### SERP Search API (backup only)
-- Only use if Google shows CAPTCHAs or browser search fails
-- API key configured via `${SERP_SEARCH_API_KEY}`
+- Only use if Bing also starts blocking or browser search fails
 - Costs money per query — avoid unless browser search is broken
 
 ## Browser (Chromium) — IMPORTANT USAGE GUIDE
