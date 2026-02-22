@@ -113,9 +113,7 @@
     ],
     "web": {
       "search": {
-        "enabled": true,
-        "provider": "brave",
-        "apiKey": "${SERP_SEARCH_API_KEY}"
+        "enabled": false
       },
       "fetch": {
         "enabled": true

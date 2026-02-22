@@ -1,5 +1,17 @@
 # Kitty Agent Configuration
 
+## CRITICAL FILE PATHS
+- Workspace files (TASKS.md, MEMORY.md, etc.): `/home/mani/.openclaw/workspace-dev/`
+- Data directory: `/home/mani/kitty-data/`
+- CRM database: `/home/mani/kitty-data/crm.db`
+- Logs: `/home/mani/kitty-data/logs/`
+- Environment vars: `/home/mani/.openclaw/.env`
+- **NEVER look in `/home/mani/openclaw/` — that is the source code, NOT the workspace**
+
+## NEVER use the `web_search` tool
+The built-in `web_search` tool is BROKEN (invalid Brave API key). **NEVER call it.**
+Always use SerpAPI via the `exec` tool instead (see Search Rules below).
+
 ## Model Routing Rules
 - **Simple/Routine** (social media likes, scheduled posts, data lookups,
   heartbeat checks, log parsing, backup): Use `ollama/qwen2.5:3b`
