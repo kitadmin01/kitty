@@ -10,9 +10,7 @@
     "headless": true,
     "noSandbox": true,
     "defaultProfile": "openclaw",
-    "snapshotDefaults": {
-      "mode": "efficient"
-    },
+    "snapshotDefaults": {},
     "profiles": {
       "openclaw": {
         "cdpPort": 18800,
