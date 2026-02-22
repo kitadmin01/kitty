@@ -85,7 +85,6 @@ LinkedIn posting requires a precise sequence of browser actions. Do NOT skip ste
 ```
 Step 1: Open LinkedIn feed
   browser: { "action": "open", "targetUrl": "https://www.linkedin.com/feed/", "profile": "openclaw" }
-  Wait 3 seconds for page to load.
 
 Step 2: Take snapshot to find "Start a post" button
   browser: { "action": "snapshot", "profile": "openclaw" }
@@ -93,38 +92,62 @@ Step 2: Take snapshot to find "Start a post" button
 
 Step 3: Click "Start a post"
   browser: { "action": "act", "request": { "kind": "click", "ref": "eXXX" }, "profile": "openclaw" }
-  (use the actual ref from Step 2)
-  Wait 2 seconds for modal to open.
 
-Step 4: Take snapshot to find the text editor
+Step 4: Take snapshot to find the text editor and Post button
   browser: { "action": "snapshot", "profile": "openclaw" }
-  Look for: textbox "Text editor for creating content" [ref=eYYY]
-  Also note: button "Post" [ref=eZZZ] (will be disabled until you type)
+  Look for BOTH of these:
+    - textbox "Text editor for creating content" [ref=eYYY]
+    - button "Post" [disabled] [ref=eZZZ]
+  WARNING: There is also a "Schedule post" button — IGNORE IT. Only use "Post".
 
-Step 5: Click the text editor
-  browser: { "action": "act", "request": { "kind": "click", "ref": "eYYY" }, "profile": "openclaw" }
+Step 5: Type your post content (use slowly:true for reliability)
+  browser: { "action": "act", "request": { "kind": "type", "ref": "eYYY", "text": "Your post...", "slowly": true }, "profile": "openclaw" }
 
-Step 6: Type your post content
-  browser: { "action": "act", "request": { "kind": "type", "ref": "eYYY", "text": "Your post content here..." }, "profile": "openclaw" }
-
-Step 7: Take snapshot to verify Post button is enabled
+Step 6: Take snapshot AFTER typing — THIS STEP IS MANDATORY
   browser: { "action": "snapshot", "profile": "openclaw" }
-  Confirm: button "Post" [ref=eZZZ] should NOT have [disabled]
+  Find: button "Post" [ref=eNEW] — it should NOT have [disabled] now.
+  Use the NEW ref from THIS snapshot, not the old one from Step 4.
 
-Step 8: Click Post
-  browser: { "action": "act", "request": { "kind": "click", "ref": "eZZZ" }, "profile": "openclaw" }
+Step 7: Click the "Post" button (NOT "Schedule post"!)
+  browser: { "action": "act", "request": { "kind": "click", "ref": "eNEW" }, "profile": "openclaw" }
+  IMPORTANT: Click ONLY the button labeled exactly "Post".
+  NEVER click "Schedule post" — that opens a scheduling dialog.
 ```
 
 ### Post to AnalyticKit Company Page
 Same flow but navigate to: `https://www.linkedin.com/company/analytickit/`
 Then click "Start a post" from there.
 
-### CRITICAL RULES for LinkedIn posting
-- **ALWAYS take a snapshot BEFORE every act** — you need real refs, never guess them
-- **NEVER use `action="act"` without a prior snapshot** — refs change on every page load
-- **Refs like `eXXX` are examples** — always use the actual ref from your latest snapshot
-- **Wait 2-3 seconds between open/navigate and snapshot** — pages need time to load
+## Twitter/X Posting — STEP-BY-STEP (MUST FOLLOW EXACTLY)
+
+```
+Step 1: Open Twitter compose page
+  browser: { "action": "open", "targetUrl": "https://twitter.com/compose/tweet", "profile": "openclaw" }
+
+Step 2: Take snapshot to find the tweet textbox
+  browser: { "action": "snapshot", "profile": "openclaw" }
+  Look for: textbox "Post text" [ref=eAAA]
+  Also note: button "Post" [disabled] [ref=eBBB]
+
+Step 3: Type your tweet (use slowly:true for reliability)
+  browser: { "action": "act", "request": { "kind": "type", "ref": "eAAA", "text": "Your tweet...", "slowly": true }, "profile": "openclaw" }
+
+Step 4: Take snapshot AFTER typing — THIS STEP IS MANDATORY
+  browser: { "action": "snapshot", "profile": "openclaw" }
+  Find: button "Post" [ref=eCCC] — should NOT have [disabled] now.
+  Use the NEW ref from THIS snapshot.
+
+Step 5: Click the "Post" button
+  browser: { "action": "act", "request": { "kind": "click", "ref": "eCCC" }, "profile": "openclaw" }
+```
+
+## CRITICAL RULES for ALL social media posting
+- **ALWAYS take a snapshot AFTER typing** — the Post button ref changes and becomes enabled
+- **NEVER click without a fresh snapshot** — refs from old snapshots are STALE
+- **Click ONLY the button labeled exactly "Post"** — never "Schedule post" or anything else
+- **Refs like eXXX are examples** — always use the ACTUAL ref from your LATEST snapshot
 - **If browser times out, do NOT retry** — tell James on Telegram
+- **Use `"slowly": true` when typing** — ensures content registers properly in rich editors
 
 ## CRM (SQLite)
 - Database: `~/kitty-data/crm.db`
