@@ -110,14 +110,15 @@ Kitty is a 24/7 autonomous marketing agent for AnalyticKit, running on OpenClaw 
     "headless": true,
     "noSandbox": true,
     "defaultProfile": "openclaw",
-    "snapshotDefaults": { "mode": "efficient" },
+    "snapshotDefaults": {},
     "profiles": { "openclaw": { "cdpPort": 18800, "color": "#FF4500" } }
   }
 }
 ```
+**Note:** `snapshotDefaults` must be `{}` (empty). Do NOT set `"mode": "efficient"` — it limits snapshots to 10K chars which cuts off most of LinkedIn/Twitter pages, making social media posting impossible.
 
 **Tools:**
-- Web search: SERP Search (configured as `provider: "brave"` — OpenClaw only accepts brave/perplexity/grok)
+- Web search: **Disabled** (`search.enabled: false`). The built-in search tool uses Brave API which had invalid keys. All web searches are done via SerpAPI using the `exec` tool instead.
 - Browser + Cron in `alsoAllow`
 - `exec.security: "allowlist"`, `exec.ask: "on-miss"`
 - `fs.workspaceOnly: false`
@@ -215,6 +216,37 @@ swap=8GB
 processors=8
 ```
 Then `wsl --shutdown` and reopen. Confirmed 23GB available.
+
+### Issue 8: Efficient Snapshot Mode Broke Social Media Posting
+**Error:** Agent couldn't find "Start a post" button on LinkedIn, clicked wrong elements (sidebar links)
+**Root Cause:** `"snapshotDefaults": { "mode": "efficient" }` in `openclaw.json` limited page snapshots to 10K characters, interactive-only elements, and 6-level depth. LinkedIn's feed snapshot returned only 2,264 chars (just the sidebar), completely missing the main content area and "Start a post" button.
+**Fix:** Changed to `"snapshotDefaults": {}` (empty object). Default mode uses 80K char limit with all elements and no depth restriction. After fix, LinkedIn snapshots return ~77K chars with all elements visible.
+
+### Issue 9: Agent Clicking "Schedule Post" Instead of "Post" on LinkedIn
+**Error:** LinkedIn post dialog has two buttons: "Schedule post" and "Post". The gpt-4o-mini model clicked "Schedule post" by mistake.
+**Root Cause:** Model didn't take a snapshot after typing content, so it used stale refs. It also didn't distinguish between the two buttons.
+**Fix:** Updated TOOLS.md with explicit warnings: "NEVER click Schedule post", "ALWAYS take snapshot AFTER typing".
+
+### Issue 10: Agent Using Stale/Wrong Element Refs
+**Error:** On Twitter, agent tried ref e346 but actual Post button was e146. Browser returned "Element not found."
+**Root Cause:** Agent didn't take a fresh snapshot after typing content. Refs from pre-typing snapshots are stale.
+**Fix:** Made post-typing snapshot mandatory in TOOLS.md documentation.
+
+### Issue 11: Social Media Posting Too Complex for gpt-4o-mini (FUNDAMENTAL FIX)
+**Error:** Despite documentation fixes (Issues 8-10), the model continued to make mistakes in the 7+ step browser posting flow — wrong refs, wrong buttons, skipping snapshots, hallucinating element IDs.
+**Root Cause:** Multi-step browser interaction (navigate → snapshot → click → snapshot → type → snapshot → click) is too complex and fragile for gpt-4o-mini to execute reliably. Each step depends on the previous one, and any mistake cascades.
+**Fix:** Created standalone Node.js posting scripts that handle the entire flow automatically:
+- **`/home/mani/kitty-data/scripts/post-linkedin.cjs`** — Uses Playwright's `getByRole` locators (aria-based, not DOM selectors) and `pressSequentially()` (triggers React events properly, unlike `fill()`)
+- **`/home/mani/kitty-data/scripts/post-twitter.cjs`** — Uses `Ctrl+Enter` keyboard shortcut for submission (Twitter's Post button has overlay issues with normal Playwright clicks)
+- Both scripts connect to the existing Chromium browser via CDP on port 18800
+- Agent now runs one `exec` command instead of 7+ browser tool calls
+- Updated TOOLS.md and AGENTS.md to make scripts the mandatory posting method
+
+**Key Technical Details:**
+| Platform | Typing Method | Submit Method | Why |
+|----------|--------------|---------------|-----|
+| LinkedIn | `pressSequentially(text, {delay:5})` | `getByRole("button", {name:"Post", exact:true}).click()` | `fill()` doesn't trigger React onChange; `exact:true` avoids matching "Schedule post" |
+| Twitter | `pressSequentially(text, {delay:10})` | `page.keyboard.press("Control+Enter")` | Twitter's Post button has overlay elements blocking normal clicks; Ctrl+Enter is the native submit shortcut |
 
 ---
 
