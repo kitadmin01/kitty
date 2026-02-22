@@ -122,11 +122,25 @@ Use the browser tool for reading web pages and general browsing. **Do NOT use it
 - Tables: leads, emails_sent, interactions
 - Use for all lead management, email tracking, and outreach status
 
-## Email (SMTP)
-- Send outreach emails with Calendly link
-- SMTP credentials in `~/.openclaw/.env`
-- Always include unsubscribe option
-- Track send status in CRM database
+## Email (SMTP) — USE THE SCRIPT (MANDATORY)
+
+**Send emails via exec tool:**
+```
+python3 /home/mani/kitty-data/scripts/send-email.py "recipient@example.com" "Subject line" "Email body text"
+```
+
+For HTML emails, add `--html` flag:
+```
+python3 /home/mani/kitty-data/scripts/send-email.py "recipient@example.com" "Subject" "<h1>Hello</h1><p>Body</p>" --html
+```
+
+**Rules:**
+- Sender is always `admin@analytickit.com` (configured in env vars)
+- Always include Calendly link in outreach: https://calendly.com/analytickit
+- Always include unsubscribe option in marketing emails
+- Track send status in CRM: `/home/mani/kitty-data/crm.db`
+- Look for `SUCCESS:` in output to confirm delivery
+- If `ERROR:`, inform James on Telegram
 
 ## Git
 - Push changes to https://github.com/kitadmin01 daily
@@ -139,7 +153,23 @@ Use the browser tool for reading web pages and general browsing. **Do NOT use it
 - `/home/mani/kitty-data/usage.db` — Token usage, costs, daily summaries
 - Always use `.backup` command for safe SQLite backups
 
-## S3 Backup
-- Daily backup of all databases, logs, and workspace to AWS S3
-- Script: `/home/mani/kitty-data/scripts/backup.sh`
-- Bucket: configured via `${S3_BACKUP_BUCKET}`
+## S3 Backup — USE THE SCRIPT
+
+**Run daily backup via exec tool:**
+```
+bash /home/mani/kitty-data/scripts/backup.sh
+```
+
+**What it backs up:**
+- SQLite databases: crm.db, metrics.db, usage.db (safe copy via `.backup`)
+- Daily logs from `/home/mani/kitty-data/logs/`
+- Workspace files from `/home/mani/.openclaw/workspace-dev/`
+- Scripts from `/home/mani/kitty-data/scripts/`
+- Config: openclaw.json
+
+**Destination:** `s3://kitty-openclaw-backups/daily-backups/YYYY-MM-DD/`
+
+**Output:** Look for `SUCCESS: Backup completed` to confirm.
+If `ERROR:`, send urgent alert to James on Telegram.
+
+**AWS CLI path:** `/home/mani/.local/bin/aws` (for any manual S3 operations)
