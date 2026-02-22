@@ -46,17 +46,65 @@ curl -s "https://serpapi.com/search.json?engine=google&q=Web3+news&tbm=nws&api_k
 - Cache/remember results within the same day to avoid duplicate API calls
 - For lead research, combine SerpAPI results with LinkedIn/Twitter browser scraping
 
-## Browser (Chromium) — IMPORTANT USAGE GUIDE
+## LinkedIn Posting — USE THE SCRIPT (MANDATORY)
+
+**DO NOT use the browser tool for LinkedIn posting.** Use the posting script via exec instead.
+
+### How to post to LinkedIn
+Run this command using the `exec` tool:
+```
+node /home/mani/kitty-data/scripts/post-linkedin.cjs "Your post content here"
+```
+
+The script handles everything automatically:
+1. Connects to the browser via CDP
+2. Navigates to LinkedIn feed
+3. Clicks "Start a post"
+4. Types content into the editor (with proper React event triggers)
+5. Waits for Post button to become enabled
+6. Clicks the Post button
+7. Verifies the post was published
+
+**Output:** The script prints status lines. Look for `SUCCESS: LinkedIn post published!` to confirm.
+
+**Error handling:** If the script prints `ERROR:`, the post failed. Common reasons:
+- Browser not running → restart the gateway
+- Not logged into LinkedIn → alert James on Telegram to re-login
+- Post button stayed disabled → content may have been rejected
+
+## Twitter/X Posting — USE THE SCRIPT (MANDATORY)
+
+**DO NOT use the browser tool for Twitter posting.** Use the posting script via exec instead.
+
+### How to post to Twitter
+Run this command using the `exec` tool:
+```
+node /home/mani/kitty-data/scripts/post-twitter.cjs "Your tweet content here"
+```
+
+**Important:** Tweets must be 280 characters or less. The script will reject content over 280 chars.
+
+The script handles everything automatically:
+1. Connects to the browser via CDP
+2. Opens the Twitter compose page
+3. Types tweet content (with proper React event triggers)
+4. Waits for Post button to become enabled
+5. Submits via Ctrl+Enter (Twitter's native keyboard shortcut)
+6. Verifies the tweet was published
+
+**Output:** Look for `SUCCESS: Tweet published!` to confirm.
+
+## Browser (Chromium) — USAGE GUIDE
+
+Use the browser tool for reading web pages and general browsing. **Do NOT use it for posting to LinkedIn or Twitter** — use the scripts above instead.
 
 ### Reading page content
 - **ALWAYS use `action="snapshot"`** to read page content. This returns the full page text.
 - Example: `{ "action": "snapshot", "profile": "openclaw" }`
-- To snapshot a specific tab: `{ "action": "snapshot", "profile": "openclaw", "targetId": "<id from tabs>" }`
 - **NEVER use `action="act"` with `request.kind="evaluate"` to read pages** — use snapshot instead.
 
 ### Opening/navigating to a URL
 - Use `action="open"` with `targetUrl`: `{ "action": "open", "targetUrl": "https://example.com", "profile": "openclaw" }`
-- Or use `action="navigate"` to change current tab URL
 
 ### Clicking, typing, and other interactions
 - First take a snapshot to get element refs
@@ -65,92 +113,12 @@ curl -s "https://serpapi.com/search.json?engine=google&q=Web3+news&tbm=nws&api_k
   - Type: `{ "action": "act", "request": { "kind": "type", "ref": "e12", "text": "hello" } }`
   - Press key: `{ "action": "act", "request": { "kind": "press", "key": "Enter" } }`
 
-### Running JavaScript on page (advanced)
-- Use `action="act"` with `request.kind="evaluate"` — **must include `fn` parameter**:
-  `{ "action": "act", "request": { "kind": "evaluate", "fn": "return document.title" } }`
-
-### Listing open tabs
-- `{ "action": "tabs", "profile": "openclaw" }`
-
 ### Profile
 - Always use `profile="openclaw"` — this is our managed browser with LinkedIn/Twitter sessions
-- Sessions stored in browser profile at ~/.openclaw/browser/openclaw/user-data/
 - If session expires, alert James on Telegram to re-login
 
-## LinkedIn Posting — STEP-BY-STEP (MUST FOLLOW EXACTLY)
-
-LinkedIn posting requires a precise sequence of browser actions. Do NOT skip steps.
-
-### Post to James's Personal Profile
-```
-Step 1: Open LinkedIn feed
-  browser: { "action": "open", "targetUrl": "https://www.linkedin.com/feed/", "profile": "openclaw" }
-
-Step 2: Take snapshot to find "Start a post" button
-  browser: { "action": "snapshot", "profile": "openclaw" }
-  Look for: button "Start a post" [ref=eXXX]
-
-Step 3: Click "Start a post"
-  browser: { "action": "act", "request": { "kind": "click", "ref": "eXXX" }, "profile": "openclaw" }
-
-Step 4: Take snapshot to find the text editor and Post button
-  browser: { "action": "snapshot", "profile": "openclaw" }
-  Look for BOTH of these:
-    - textbox "Text editor for creating content" [ref=eYYY]
-    - button "Post" [disabled] [ref=eZZZ]
-  WARNING: There is also a "Schedule post" button — IGNORE IT. Only use "Post".
-
-Step 5: Type your post content (use slowly:true for reliability)
-  browser: { "action": "act", "request": { "kind": "type", "ref": "eYYY", "text": "Your post...", "slowly": true }, "profile": "openclaw" }
-
-Step 6: Take snapshot AFTER typing — THIS STEP IS MANDATORY
-  browser: { "action": "snapshot", "profile": "openclaw" }
-  Find: button "Post" [ref=eNEW] — it should NOT have [disabled] now.
-  Use the NEW ref from THIS snapshot, not the old one from Step 4.
-
-Step 7: Click the "Post" button (NOT "Schedule post"!)
-  browser: { "action": "act", "request": { "kind": "click", "ref": "eNEW" }, "profile": "openclaw" }
-  IMPORTANT: Click ONLY the button labeled exactly "Post".
-  NEVER click "Schedule post" — that opens a scheduling dialog.
-```
-
-### Post to AnalyticKit Company Page
-Same flow but navigate to: `https://www.linkedin.com/company/analytickit/`
-Then click "Start a post" from there.
-
-## Twitter/X Posting — STEP-BY-STEP (MUST FOLLOW EXACTLY)
-
-```
-Step 1: Open Twitter compose page
-  browser: { "action": "open", "targetUrl": "https://twitter.com/compose/tweet", "profile": "openclaw" }
-
-Step 2: Take snapshot to find the tweet textbox
-  browser: { "action": "snapshot", "profile": "openclaw" }
-  Look for: textbox "Post text" [ref=eAAA]
-  Also note: button "Post" [disabled] [ref=eBBB]
-
-Step 3: Type your tweet (use slowly:true for reliability)
-  browser: { "action": "act", "request": { "kind": "type", "ref": "eAAA", "text": "Your tweet...", "slowly": true }, "profile": "openclaw" }
-
-Step 4: Take snapshot AFTER typing — THIS STEP IS MANDATORY
-  browser: { "action": "snapshot", "profile": "openclaw" }
-  Find: button "Post" [ref=eCCC] — should NOT have [disabled] now.
-  Use the NEW ref from THIS snapshot.
-
-Step 5: Click the "Post" button
-  browser: { "action": "act", "request": { "kind": "click", "ref": "eCCC" }, "profile": "openclaw" }
-```
-
-## CRITICAL RULES for ALL social media posting
-- **ALWAYS take a snapshot AFTER typing** — the Post button ref changes and becomes enabled
-- **NEVER click without a fresh snapshot** — refs from old snapshots are STALE
-- **Click ONLY the button labeled exactly "Post"** — never "Schedule post" or anything else
-- **Refs like eXXX are examples** — always use the ACTUAL ref from your LATEST snapshot
-- **If browser times out, do NOT retry** — tell James on Telegram
-- **Use `"slowly": true` when typing** — ensures content registers properly in rich editors
-
 ## CRM (SQLite)
-- Database: `~/kitty-data/crm.db`
+- Database: `/home/mani/kitty-data/crm.db`
 - Tables: leads, emails_sent, interactions
 - Use for all lead management, email tracking, and outreach status
 
@@ -166,12 +134,12 @@ Step 5: Click the "Post" button
 - Use descriptive commit messages with dates
 
 ## SQLite Databases
-- `~/kitty-data/crm.db` — Leads, emails, interactions
-- `~/kitty-data/metrics.db` — Social media metrics, posts, growth
-- `~/kitty-data/usage.db` — Token usage, costs, daily summaries
+- `/home/mani/kitty-data/crm.db` — Leads, emails, interactions
+- `/home/mani/kitty-data/metrics.db` — Social media metrics, posts, growth
+- `/home/mani/kitty-data/usage.db` — Token usage, costs, daily summaries
 - Always use `.backup` command for safe SQLite backups
 
 ## S3 Backup
 - Daily backup of all databases, logs, and workspace to AWS S3
-- Script: `~/kitty-data/scripts/backup.sh`
+- Script: `/home/mani/kitty-data/scripts/backup.sh`
 - Bucket: configured via `${S3_BACKUP_BUCKET}`

@@ -44,16 +44,22 @@ Always use SerpAPI via the `exec` tool instead (see Search Rules below).
 - After getting SerpAPI results, use the **browser** to open article URLs and snapshot for full content
 - SerpAPI has 100 searches/month — don't waste on duplicate queries
 
-## Browser Tool Rules — CRITICAL
+## Social Media Posting — USE SCRIPTS VIA EXEC (MANDATORY)
+- **LinkedIn**: `node /home/mani/kitty-data/scripts/post-linkedin.cjs "Your post content here"`
+- **Twitter**: `node /home/mani/kitty-data/scripts/post-twitter.cjs "Your tweet here (max 280 chars)"`
+- Run these via the `exec` tool. They handle the entire posting flow automatically.
+- **DO NOT use the browser tool to post to LinkedIn or Twitter** — the scripts are more reliable.
+- Look for `SUCCESS:` in the output to confirm the post was published.
+- If the script prints `ERROR:`, inform James on Telegram.
+
+## Browser Tool Rules
+- Use the browser tool for reading web pages and general browsing ONLY.
 - To READ page content: use `action="snapshot"` (NEVER use act:evaluate for reading)
 - To OPEN a URL: use `action="open"` with `targetUrl`
 - To INTERACT with elements: **ALWAYS snapshot first**, then `action="act"` with the ref from snapshot
 - **NEVER guess element refs** — always get them from a fresh snapshot
-- **NEVER use `action="act"` without taking a snapshot first** — refs change on every page load
-- **Wait 2-3 seconds after open/navigate before snapshot** — pages need time to load
 - Always pass `profile="openclaw"` in every browser call
 - If browser tool fails, do NOT retry — inform James on Telegram
-- **For LinkedIn posting**: read TOOLS.md "LinkedIn Posting" section — follow the exact 8-step flow
 
 ## Safety Rules
 - NEVER store passwords in plain text in workspace files or memory
