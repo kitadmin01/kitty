@@ -77,6 +77,55 @@ curl -s "https://serpapi.com/search.json?engine=google&q=Web3+news&tbm=nws&api_k
 - Sessions stored in browser profile at ~/.openclaw/browser/openclaw/user-data/
 - If session expires, alert James on Telegram to re-login
 
+## LinkedIn Posting — STEP-BY-STEP (MUST FOLLOW EXACTLY)
+
+LinkedIn posting requires a precise sequence of browser actions. Do NOT skip steps.
+
+### Post to James's Personal Profile
+```
+Step 1: Open LinkedIn feed
+  browser: { "action": "open", "targetUrl": "https://www.linkedin.com/feed/", "profile": "openclaw" }
+  Wait 3 seconds for page to load.
+
+Step 2: Take snapshot to find "Start a post" button
+  browser: { "action": "snapshot", "profile": "openclaw" }
+  Look for: button "Start a post" [ref=eXXX]
+
+Step 3: Click "Start a post"
+  browser: { "action": "act", "request": { "kind": "click", "ref": "eXXX" }, "profile": "openclaw" }
+  (use the actual ref from Step 2)
+  Wait 2 seconds for modal to open.
+
+Step 4: Take snapshot to find the text editor
+  browser: { "action": "snapshot", "profile": "openclaw" }
+  Look for: textbox "Text editor for creating content" [ref=eYYY]
+  Also note: button "Post" [ref=eZZZ] (will be disabled until you type)
+
+Step 5: Click the text editor
+  browser: { "action": "act", "request": { "kind": "click", "ref": "eYYY" }, "profile": "openclaw" }
+
+Step 6: Type your post content
+  browser: { "action": "act", "request": { "kind": "type", "ref": "eYYY", "text": "Your post content here..." }, "profile": "openclaw" }
+
+Step 7: Take snapshot to verify Post button is enabled
+  browser: { "action": "snapshot", "profile": "openclaw" }
+  Confirm: button "Post" [ref=eZZZ] should NOT have [disabled]
+
+Step 8: Click Post
+  browser: { "action": "act", "request": { "kind": "click", "ref": "eZZZ" }, "profile": "openclaw" }
+```
+
+### Post to AnalyticKit Company Page
+Same flow but navigate to: `https://www.linkedin.com/company/analytickit/`
+Then click "Start a post" from there.
+
+### CRITICAL RULES for LinkedIn posting
+- **ALWAYS take a snapshot BEFORE every act** — you need real refs, never guess them
+- **NEVER use `action="act"` without a prior snapshot** — refs change on every page load
+- **Refs like `eXXX` are examples** — always use the actual ref from your latest snapshot
+- **Wait 2-3 seconds between open/navigate and snapshot** — pages need time to load
+- **If browser times out, do NOT retry** — tell James on Telegram
+
 ## CRM (SQLite)
 - Database: `~/kitty-data/crm.db`
 - Tables: leads, emails_sent, interactions

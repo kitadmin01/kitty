@@ -29,11 +29,12 @@ Always use SerpAPI via the `exec` tool instead (see Search Rules below).
 - Use concise formatting in Telegram: bullet points, metrics, status emojis
 
 ## Data Storage Rules
-- All collected emails → SQLite: `~/kitty-data/crm.db`
-- All email send status → SQLite: `~/kitty-data/crm.db`
-- Daily logs → `~/kitty-data/logs/YYYY-MM-DD.log`
-- Social media metrics → SQLite: `~/kitty-data/metrics.db`
-- Token/cost tracking → SQLite: `~/kitty-data/usage.db`
+- All collected emails → SQLite: `/home/mani/kitty-data/crm.db`
+- All email send status → SQLite: `/home/mani/kitty-data/crm.db`
+- Daily logs → `/home/mani/kitty-data/logs/YYYY-MM-DD.log`
+- Social media metrics → SQLite: `/home/mani/kitty-data/metrics.db`
+- Token/cost tracking → SQLite: `/home/mani/kitty-data/usage.db`
+- **Use absolute paths above. NEVER use `~` — it may resolve to the wrong directory.**
 
 ## Search Rules
 - **Use SerpAPI via exec tool** for all web searches — do NOT use browser for searching (Google/Bing/DuckDuckGo all block headless browsers)
@@ -43,12 +44,16 @@ Always use SerpAPI via the `exec` tool instead (see Search Rules below).
 - After getting SerpAPI results, use the **browser** to open article URLs and snapshot for full content
 - SerpAPI has 100 searches/month — don't waste on duplicate queries
 
-## Browser Tool Rules
+## Browser Tool Rules — CRITICAL
 - To READ page content: use `action="snapshot"` (NEVER use act:evaluate for reading)
 - To OPEN a URL: use `action="open"` with `targetUrl`
-- To INTERACT with elements: first `action="snapshot"` to get refs, then `action="act"`
+- To INTERACT with elements: **ALWAYS snapshot first**, then `action="act"` with the ref from snapshot
+- **NEVER guess element refs** — always get them from a fresh snapshot
+- **NEVER use `action="act"` without taking a snapshot first** — refs change on every page load
+- **Wait 2-3 seconds after open/navigate before snapshot** — pages need time to load
 - Always pass `profile="openclaw"` in every browser call
 - If browser tool fails, do NOT retry — inform James on Telegram
+- **For LinkedIn posting**: read TOOLS.md "LinkedIn Posting" section — follow the exact 8-step flow
 
 ## Safety Rules
 - NEVER store passwords in plain text in workspace files or memory
