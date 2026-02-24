@@ -248,6 +248,46 @@ Then `wsl --shutdown` and reopen. Confirmed 23GB available.
 | LinkedIn | `pressSequentially(text, {delay:5})` | `getByRole("button", {name:"Post", exact:true}).click()` | `fill()` doesn't trigger React onChange; `exact:true` avoids matching "Schedule post" |
 | Twitter | `pressSequentially(text, {delay:10})` | `page.keyboard.press("Control+Enter")` | Twitter's Post button has overlay elements blocking normal clicks; Ctrl+Enter is the native submit shortcut |
 
+### Issue 12: Cron Jobs Were Never Created — No Scheduled Tasks Running
+**Error:** Kitty only ran heartbeats and responded to Telegram — never executed daily/weekly tasks (posting, lead research, email followups, backups, etc.)
+**Root Cause:** `~/.openclaw/cron/jobs.json` had `"jobs": []` — empty. The TASKS.md file documented what Kitty should do, but no actual cron jobs were registered with OpenClaw's cron scheduler. The heartbeat was the only recurring trigger (configured in openclaw.json), but it only runs the HEARTBEAT.md checklist.
+**Fix:** Created 18 cron jobs via `openclaw cron add` CLI:
+
+| Time | Job | Model |
+|------|-----|-------|
+| `0 3 * * *` | daily-backup | gpt-4o-mini |
+| `0 7 * * *` | daily-brief | gpt-4o |
+| `0 8 * * *` | tweet-1 | gpt-4o-mini |
+| `0 9 * * *` | linkedin-personal-post | gpt-4o |
+| `0 10 * * *` | lead-research | gpt-4o |
+| `5 10 * * *` | tweet-2 | gpt-4o-mini |
+| `0 13 * * *` | linkedin-company-post | gpt-4o |
+| `5 13 * * *` | tweet-3 | gpt-4o-mini |
+| `0 14 * * *` | email-followup | gpt-4o-mini |
+| `0 16 * * *` | tweet-4 | gpt-4o-mini |
+| `0 19 * * *` | tweet-5 | gpt-4o-mini |
+| `0 21 * * *` | eod-summary | gpt-4o-mini |
+| `0 23 * * *` | git-push | gpt-4o-mini |
+| `0 8 * * 1` | traffic-analysis (Mon) | gpt-4o |
+| `0 10 * * 4` | youtube-topic (Thu) | gpt-4o |
+| `0 10 * * 5` | youtube-presentation (Fri) | gpt-4o |
+| `0 10 * * 6` | youtube-script (Sat) | gpt-4o |
+| `0 22 * * 0` | security-audit (Sun) | gpt-4o-mini |
+
+All jobs use `--session isolated` and `--announce` for Telegram delivery.
+Social media posting jobs use the scripts (`post-linkedin.cjs`, `post-twitter.cjs`) via exec.
+Email jobs use `send-email.py` via exec.
+Backup uses `backup.sh` via exec.
+
+### Issue 13: Leads Collected But No Emails Sent
+**Error:** Kitty collected 19 leads into CRM but never sent outreach emails.
+**Root Cause:** Two problems: (1) No email sending script existed until the SMTP setup. (2) No cron job was triggering the email workflow.
+**Fix:**
+- Created `send-email.py` (Python SMTP script) and `send-outreach-batch.py` (batch sender)
+- Sent outreach emails to all 14 unique leads with valid emails
+- Added `email-followup` cron job at 2 PM daily to follow up on contacted leads
+- `lead-research` cron job at 10 AM now includes email sending instructions
+
 ---
 
 ## Starting the Gateway
