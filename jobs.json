@@ -6,7 +6,7 @@
       "name": "daily-brief",
       "enabled": true,
       "createdAtMs": 1771897974845,
-      "updatedAtMs": 1771938051770,
+      "updatedAtMs": 1772024429974,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *"
@@ -15,7 +15,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Generate the daily brief. Check CRM database at /home/mani/kitty-data/crm.db for lead stats. Check /home/mani/kitty-data/logs/ for yesterday's activity. Send a concise performance report to Telegram with: leads collected, emails sent, social media activity, any alerts.",
+        "message": "Generate the daily brief. Check CRM database at /home/mani/kitty-data/crm.db for lead stats. Print a concise performance report with: leads collected, emails sent, social media posts, any alerts. Do NOT try to send messages — the delivery system handles that automatically.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 300
       },
@@ -26,10 +26,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772024400000,
-        "lastRunAtMs": 1771938001946,
+        "nextRunAtMs": 1772110800000,
+        "lastRunAtMs": 1772024401063,
         "lastStatus": "ok",
-        "lastDurationMs": 49824,
+        "lastDurationMs": 28911,
         "consecutiveErrors": 0
       }
     },
@@ -38,7 +38,7 @@
       "name": "tweet-1",
       "enabled": true,
       "createdAtMs": 1771898031231,
-      "updatedAtMs": 1771941677805,
+      "updatedAtMs": 1772028069728,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *"
@@ -47,7 +47,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write an engaging tweet (max 280 chars) about AnalyticKit or Web3 analytics. Then post it using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet text\". Log the result.",
+        "message": "Write an engaging tweet (max 280 chars) about AnalyticKit or Web3 analytics. Post it using exec with timeout 120: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet text\". Print the result. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -58,10 +58,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772028000000,
-        "lastRunAtMs": 1771941600008,
+        "nextRunAtMs": 1772114400000,
+        "lastRunAtMs": 1772028001224,
         "lastStatus": "ok",
-        "lastDurationMs": 77797,
+        "lastDurationMs": 68504,
         "consecutiveErrors": 0
       }
     },
@@ -70,7 +70,7 @@
       "name": "linkedin-personal-post",
       "enabled": true,
       "createdAtMs": 1771898032716,
-      "updatedAtMs": 1771945251430,
+      "updatedAtMs": 1772031664335,
       "schedule": {
         "kind": "cron",
         "expr": "0 9 * * *"
@@ -79,7 +79,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Search for trending Web3 news using SerpAPI: curl -s \"https://serpapi.com/search.json?engine=google&q=Web3+blockchain+analytics+news+2026&num=5&api_key=${SERP_SEARCH_API_KEY}\" | python3 -c \"import sys,json; data=json.load(sys.stdin); [print(r.get('title',''),r.get('snippet','')) for r in data.get('organic_results',[])]\" — then write an engaging LinkedIn post with 3-5 hashtags. Post using: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Log the result.",
+        "message": "Search for trending Web3 news using SerpAPI: curl -s \"https://serpapi.com/search.json?engine=google&q=Web3+blockchain+analytics+news+2026&num=5&api_key=${SERP_SEARCH_API_KEY}\" | python3 -c \"import sys,json; data=json.load(sys.stdin); [print(r.get('title',''),r.get('snippet','')) for r in data.get('organic_results',[])]\" — then write an engaging LinkedIn post with 3-5 hashtags. Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Print the result. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 300
       },
@@ -90,10 +90,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772031600000,
-        "lastRunAtMs": 1771945201282,
+        "nextRunAtMs": 1772118000000,
+        "lastRunAtMs": 1772031603607,
         "lastStatus": "ok",
-        "lastDurationMs": 50148,
+        "lastDurationMs": 60728,
         "consecutiveErrors": 0
       }
     },
@@ -143,7 +143,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write and post a tweet about a Web3 industry insight (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
+        "message": "Write and post a tweet about a Web3 industry insight (max 280 chars). Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\". Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -175,7 +175,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write a LinkedIn post for AnalyticKit company page. Focus on product features, Web3 analytics insights, or blog content from https://analytickit.com/blog. Post using: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Log the result.",
+        "message": "Write a LinkedIn post for AnalyticKit company page. Focus on product features, Web3 analytics insights, or blog content from https://analytickit.com/blog. Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Print the result. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 300
       },
@@ -207,7 +207,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write and post an afternoon tweet about AnalyticKit or Web3 analytics tips (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
+        "message": "Write and post an afternoon tweet about AnalyticKit or Web3 analytics tips (max 280 chars). Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\". Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -267,7 +267,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write and post a tweet about AnalyticKit features or Web3 analytics (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
+        "message": "Write and post a tweet about AnalyticKit features or Web3 analytics (max 280 chars). Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\". Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -299,7 +299,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write and post an engaging evening tweet — a question or hot take about Web3/crypto (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
+        "message": "Write and post an engaging evening tweet — a question or hot take about Web3/crypto (max 280 chars). Post using exec with timeout 120: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\". Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -322,7 +322,7 @@
       "name": "eod-summary",
       "enabled": true,
       "createdAtMs": 1771898177645,
-      "updatedAtMs": 1771902083393,
+      "updatedAtMs": 1771988428835,
       "schedule": {
         "kind": "cron",
         "expr": "0 21 * * *"
@@ -331,7 +331,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Quick end-of-day summary: Check /home/mani/kitty-data/logs/ and CRM at /home/mani/kitty-data/crm.db. Report tasks completed today, any failures, and pending items for tomorrow. Send to Telegram. Keep it short — 5-10 lines max.",
+        "message": "Quick end-of-day summary: Check /home/mani/kitty-data/logs/ and CRM at /home/mani/kitty-data/crm.db. Print tasks completed today, any failures, and pending items for tomorrow. Keep it short — 5-10 lines max. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -342,10 +342,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771988400000,
-        "lastRunAtMs": 1771902000006,
+        "nextRunAtMs": 1772074800000,
+        "lastRunAtMs": 1771988400007,
         "lastStatus": "ok",
-        "lastDurationMs": 83387,
+        "lastDurationMs": 28828,
         "consecutiveErrors": 0
       }
     },
@@ -354,7 +354,7 @@
       "name": "git-push",
       "enabled": true,
       "createdAtMs": 1771898179114,
-      "updatedAtMs": 1771909216792,
+      "updatedAtMs": 1771995631274,
       "schedule": {
         "kind": "cron",
         "expr": "0 23 * * *"
@@ -374,10 +374,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771995600000,
-        "lastRunAtMs": 1771909202539,
+        "nextRunAtMs": 1772082000000,
+        "lastRunAtMs": 1771995601702,
         "lastStatus": "ok",
-        "lastDurationMs": 14253,
+        "lastDurationMs": 29572,
         "consecutiveErrors": 0
       }
     },
@@ -386,7 +386,7 @@
       "name": "daily-backup",
       "enabled": true,
       "createdAtMs": 1771898180578,
-      "updatedAtMs": 1771923634159,
+      "updatedAtMs": 1772010037850,
       "schedule": {
         "kind": "cron",
         "expr": "0 3 * * *"
@@ -395,7 +395,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run the daily S3 backup: bash /home/mani/kitty-data/scripts/backup.sh. If it prints SUCCESS, report to Telegram. If ERROR, send urgent alert.",
+        "message": "Run the daily S3 backup using exec with timeout 120: bash /home/mani/kitty-data/scripts/backup.sh. Print the result. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },
@@ -406,10 +406,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772010000000,
-        "lastRunAtMs": 1771923601318,
+        "nextRunAtMs": 1772096400000,
+        "lastRunAtMs": 1772010000009,
         "lastStatus": "ok",
-        "lastDurationMs": 32841,
+        "lastDurationMs": 37841,
         "consecutiveErrors": 0
       }
     },
@@ -427,7 +427,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Analyze AnalyticKit website traffic. Open https://dpa.analytickit.com/ via browser and snapshot to read dashboard data. Report traffic trends, top referral sources, top pages, SEO recommendations. Send full report to Telegram.",
+        "message": "Analyze AnalyticKit website traffic. Open https://dpa.analytickit.com/ via browser and snapshot to read dashboard data. Print traffic trends, top referral sources, top pages, SEO recommendations. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 300
       },
@@ -455,7 +455,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Research trending Web3 and AnalyticKit topics for this week's YouTube video. Use SerpAPI to search for hot topics. Suggest 3 topic options with brief outlines. Send to Telegram for James to choose.",
+        "message": "Research trending Web3 and AnalyticKit topics for this week's YouTube video. Use SerpAPI to search for hot topics. Suggest 3 topic options with brief outlines for James to choose. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 300
       },
@@ -483,7 +483,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Create a 15-20 slide presentation for this week's YouTube video. Include speaker notes. Save to /home/mani/kitty-data/youtube/. Notify on Telegram when done.",
+        "message": "Create a 15-20 slide presentation for this week's YouTube video. Include speaker notes. Save to /home/mani/kitty-data/youtube/. Print a summary of slides created. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 600
       },
@@ -511,7 +511,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Draft a 15-20 minute video script for this week's YouTube video. Include intro hook, key points, transitions, and CTA (subscribe, check out AnalyticKit). Send script to Telegram.",
+        "message": "Draft a 15-20 minute video script for this week's YouTube video. Include intro hook, key points, transitions, and CTA (subscribe, check out AnalyticKit). Save to /home/mani/kitty-data/youtube/ and print a summary. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o",
         "timeoutSeconds": 600
       },
@@ -539,7 +539,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Run security audit: Check that gateway is bound to loopback only. Verify .env file permissions are 600. Verify Telegram allowlist has only James's ID. Check logs for unauthorized API calls. Report to Telegram.",
+        "message": "Run security audit: Check that gateway is bound to loopback only. Verify .env file permissions are 600. Verify Telegram allowlist has only James's ID. Check logs for unauthorized API calls. Print the report. Do NOT try to send messages — delivery is automatic.",
         "model": "openai/gpt-4o-mini",
         "timeoutSeconds": 300
       },

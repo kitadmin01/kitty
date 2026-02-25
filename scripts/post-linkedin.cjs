@@ -5,6 +5,14 @@
 const CDP_URL = "http://127.0.0.1:18800";
 const FEED_URL = "https://www.linkedin.com/feed/";
 
+// Global timeout: kill process after 120 seconds to prevent hanging
+const SCRIPT_TIMEOUT_MS = 120000;
+const timeoutHandle = setTimeout(() => {
+  console.error("ERROR: Script timed out after 120 seconds — force exiting");
+  process.exit(1);
+}, SCRIPT_TIMEOUT_MS);
+timeoutHandle.unref();
+
 async function main() {
   const content = process.argv[2];
   if (!content || content.trim().length === 0) {
