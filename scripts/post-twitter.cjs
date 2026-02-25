@@ -5,6 +5,14 @@
 const CDP_URL = "http://127.0.0.1:18800";
 const COMPOSE_URL = "https://twitter.com/compose/tweet";
 
+// Global timeout: kill process after 90 seconds to prevent hanging
+const SCRIPT_TIMEOUT_MS = 90000;
+const timeoutHandle = setTimeout(() => {
+  console.error("ERROR: Script timed out after 90 seconds — force exiting");
+  process.exit(1);
+}, SCRIPT_TIMEOUT_MS);
+timeoutHandle.unref();
+
 async function main() {
   const content = process.argv[2];
   if (!content || content.trim().length === 0) {
@@ -63,6 +71,16 @@ async function main() {
     await editor.click();
     await page.waitForTimeout(500);
 
+    // Clear any stale text from a previous failed compose attempt
+    const existingText = await editor.textContent().catch(() => "");
+    if (existingText && existingText.trim().length > 0) {
+      console.log("WARN: Clearing stale text from compose box (" + existingText.length + " chars)");
+      await editor.press("Control+a");
+      await page.waitForTimeout(200);
+      await editor.press("Backspace");
+      await page.waitForTimeout(500);
+    }
+
     // Type tweet content using pressSequentially (triggers React events)
     await editor.pressSequentially(content, { delay: 10 });
     await page.waitForTimeout(2000);
@@ -92,16 +110,28 @@ async function main() {
     await page.keyboard.press("Control+Enter");
     console.log("OK: Pressed Ctrl+Enter to submit");
 
-    // Wait for submission
-    await page.waitForTimeout(5000);
+    // Wait and verify tweet was submitted (compose dialog should close)
+    let posted = false;
+    for (let check = 0; check < 10; check++) {
+      await page.waitForTimeout(2000);
+      const finalUrl = page.url();
+      const editorGone = !(await editor.isVisible().catch(() => false));
+      if (editorGone || finalUrl.includes("/home")) {
+        posted = true;
+        break;
+      }
+      if (check === 4) {
+        // Retry Ctrl+Enter once in case first didn't register
+        console.log("WARN: Retrying Ctrl+Enter");
+        await page.keyboard.press("Control+Enter");
+      }
+    }
 
-    // Verify tweet was submitted (compose dialog should close, URL changes to /home)
-    const finalUrl = page.url();
-    const editorStillVisible = await editor.isVisible().catch(() => false);
-    if (!editorStillVisible || finalUrl.includes("/home")) {
+    if (posted) {
       console.log("SUCCESS: Tweet published!");
     } else {
-      console.log("WARN: Editor may still be visible. Tweet submission may need more time.");
+      console.error("ERROR: Tweet may not have been published — compose dialog still visible");
+      process.exit(1);
     }
 
   } catch (e) {

@@ -6,7 +6,7 @@
       "name": "daily-brief",
       "enabled": true,
       "createdAtMs": 1771897974845,
-      "updatedAtMs": 1771897974845,
+      "updatedAtMs": 1771938051770,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *"
@@ -21,10 +21,16 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771938000000
+        "nextRunAtMs": 1772024400000,
+        "lastRunAtMs": 1771938001946,
+        "lastStatus": "ok",
+        "lastDurationMs": 49824,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -32,7 +38,7 @@
       "name": "tweet-1",
       "enabled": true,
       "createdAtMs": 1771898031231,
-      "updatedAtMs": 1771898031231,
+      "updatedAtMs": 1771941677805,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *"
@@ -43,14 +49,20 @@
         "kind": "agentTurn",
         "message": "Write an engaging tweet (max 280 chars) about AnalyticKit or Web3 analytics. Then post it using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet text\". Log the result.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771941600000
+        "nextRunAtMs": 1772028000000,
+        "lastRunAtMs": 1771941600008,
+        "lastStatus": "ok",
+        "lastDurationMs": 77797,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -58,7 +70,7 @@
       "name": "linkedin-personal-post",
       "enabled": true,
       "createdAtMs": 1771898032716,
-      "updatedAtMs": 1771898032716,
+      "updatedAtMs": 1771945251430,
       "schedule": {
         "kind": "cron",
         "expr": "0 9 * * *"
@@ -69,14 +81,20 @@
         "kind": "agentTurn",
         "message": "Search for trending Web3 news using SerpAPI: curl -s \"https://serpapi.com/search.json?engine=google&q=Web3+blockchain+analytics+news+2026&num=5&api_key=${SERP_SEARCH_API_KEY}\" | python3 -c \"import sys,json; data=json.load(sys.stdin); [print(r.get('title',''),r.get('snippet','')) for r in data.get('organic_results',[])]\" — then write an engaging LinkedIn post with 3-5 hashtags. Post using: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Log the result.",
         "model": "openai/gpt-4o",
-        "timeoutSeconds": 180
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771945200000
+        "nextRunAtMs": 1772031600000,
+        "lastRunAtMs": 1771945201282,
+        "lastStatus": "ok",
+        "lastDurationMs": 50148,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -84,7 +102,7 @@
       "name": "lead-research",
       "enabled": true,
       "createdAtMs": 1771898034164,
-      "updatedAtMs": 1771898034164,
+      "updatedAtMs": 1771948830685,
       "schedule": {
         "kind": "cron",
         "expr": "0 10 * * *"
@@ -99,10 +117,16 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771948800000
+        "nextRunAtMs": 1772035200000,
+        "lastRunAtMs": 1771948800008,
+        "lastStatus": "ok",
+        "lastDurationMs": 30677,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -110,7 +134,7 @@
       "name": "tweet-2",
       "enabled": true,
       "createdAtMs": 1771898035577,
-      "updatedAtMs": 1771898035577,
+      "updatedAtMs": 1771949191602,
       "schedule": {
         "kind": "cron",
         "expr": "5 10 * * *"
@@ -121,14 +145,20 @@
         "kind": "agentTurn",
         "message": "Write and post a tweet about a Web3 industry insight (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771949100000
+        "nextRunAtMs": 1772035500000,
+        "lastRunAtMs": 1771949100008,
+        "lastStatus": "ok",
+        "lastDurationMs": 91594,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -136,7 +166,7 @@
       "name": "linkedin-company-post",
       "enabled": true,
       "createdAtMs": 1771898082104,
-      "updatedAtMs": 1771898082104,
+      "updatedAtMs": 1771959658950,
       "schedule": {
         "kind": "cron",
         "expr": "0 13 * * *"
@@ -147,22 +177,28 @@
         "kind": "agentTurn",
         "message": "Write a LinkedIn post for AnalyticKit company page. Focus on product features, Web3 analytics insights, or blog content from https://analytickit.com/blog. Post using: node /home/mani/kitty-data/scripts/post-linkedin.cjs \"your post content\". Log the result.",
         "model": "openai/gpt-4o",
-        "timeoutSeconds": 180
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771959600000
+        "nextRunAtMs": 1772046000000,
+        "lastRunAtMs": 1771959600007,
+        "lastStatus": "ok",
+        "lastDurationMs": 58943,
+        "consecutiveErrors": 0
       }
     },
     {
       "id": "bc5191eb-a377-4193-a90d-da6fe6ebd76d",
       "name": "tweet-3",
       "enabled": true,
-      "createdAtMs": 1771898083904,
-      "updatedAtMs": 1771898083904,
+      "createdAtMs": 1771898083000,
+      "updatedAtMs": 1771898083000,
       "schedule": {
         "kind": "cron",
         "expr": "5 13 * * *"
@@ -171,16 +207,18 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "Write and post a tweet about AI + blockchain or DeFi analytics (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
+        "message": "Write and post an afternoon tweet about AnalyticKit or Web3 analytics tips (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771959900000
+        "nextRunAtMs": 1772046300000
       }
     },
     {
@@ -188,7 +226,7 @@
       "name": "email-followup",
       "enabled": true,
       "createdAtMs": 1771898085725,
-      "updatedAtMs": 1771898085725,
+      "updatedAtMs": 1771963242368,
       "schedule": {
         "kind": "cron",
         "expr": "0 14 * * *"
@@ -199,14 +237,20 @@
         "kind": "agentTurn",
         "message": "Check CRM at /home/mani/kitty-data/crm.db for leads with status 'contacted' that were emailed 3+ days ago (check emails_sent table). Draft and send follow-up emails using: python3 /home/mani/kitty-data/scripts/send-email.py \"email\" \"Follow-up: AnalyticKit Demo\" \"body\". Update lead status.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 180
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771963200000
+        "nextRunAtMs": 1772049600000,
+        "lastRunAtMs": 1771963203405,
+        "lastStatus": "ok",
+        "lastDurationMs": 38963,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -214,7 +258,7 @@
       "name": "tweet-4",
       "enabled": true,
       "createdAtMs": 1771898087538,
-      "updatedAtMs": 1771898087538,
+      "updatedAtMs": 1771970471741,
       "schedule": {
         "kind": "cron",
         "expr": "0 16 * * *"
@@ -225,14 +269,20 @@
         "kind": "agentTurn",
         "message": "Write and post a tweet about AnalyticKit features or Web3 analytics (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771970400000
+        "nextRunAtMs": 1772056800000,
+        "lastRunAtMs": 1771970402996,
+        "lastStatus": "ok",
+        "lastDurationMs": 68745,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -240,7 +290,7 @@
       "name": "tweet-5",
       "enabled": true,
       "createdAtMs": 1771898089412,
-      "updatedAtMs": 1771898089412,
+      "updatedAtMs": 1771981250556,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *"
@@ -251,14 +301,20 @@
         "kind": "agentTurn",
         "message": "Write and post an engaging evening tweet — a question or hot take about Web3/crypto (max 280 chars). Post using: node /home/mani/kitty-data/scripts/post-twitter.cjs \"your tweet\"",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771981200000
+        "nextRunAtMs": 1772067600000,
+        "lastRunAtMs": 1771981201583,
+        "lastStatus": "ok",
+        "lastDurationMs": 48973,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -266,7 +322,7 @@
       "name": "eod-summary",
       "enabled": true,
       "createdAtMs": 1771898177645,
-      "updatedAtMs": 1771898328804,
+      "updatedAtMs": 1771902083393,
       "schedule": {
         "kind": "cron",
         "expr": "0 21 * * *"
@@ -277,17 +333,19 @@
         "kind": "agentTurn",
         "message": "Quick end-of-day summary: Check /home/mani/kitty-data/logs/ and CRM at /home/mani/kitty-data/crm.db. Report tasks completed today, any failures, and pending items for tomorrow. Send to Telegram. Keep it short — 5-10 lines max.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771902000000,
-        "lastRunAtMs": 1771898229963,
+        "nextRunAtMs": 1771988400000,
+        "lastRunAtMs": 1771902000006,
         "lastStatus": "ok",
-        "lastDurationMs": 98841,
+        "lastDurationMs": 83387,
         "consecutiveErrors": 0
       }
     },
@@ -296,7 +354,7 @@
       "name": "git-push",
       "enabled": true,
       "createdAtMs": 1771898179114,
-      "updatedAtMs": 1771898179114,
+      "updatedAtMs": 1771909216792,
       "schedule": {
         "kind": "cron",
         "expr": "0 23 * * *"
@@ -307,14 +365,20 @@
         "kind": "agentTurn",
         "message": "Commit and push changes in /home/mani/projects/kitty to git. Use: git -c user.name=kitadmin01 -c user.email=analytickit@gmail.com add -A && git -c user.name=kitadmin01 -c user.email=analytickit@gmail.com commit -m \"Daily update YYYY-MM-DD\" && git push. Do NOT commit secrets or .env files.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771909200000
+        "nextRunAtMs": 1771995600000,
+        "lastRunAtMs": 1771909202539,
+        "lastStatus": "ok",
+        "lastDurationMs": 14253,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -322,7 +386,7 @@
       "name": "daily-backup",
       "enabled": true,
       "createdAtMs": 1771898180578,
-      "updatedAtMs": 1771898180578,
+      "updatedAtMs": 1771923634159,
       "schedule": {
         "kind": "cron",
         "expr": "0 3 * * *"
@@ -333,14 +397,20 @@
         "kind": "agentTurn",
         "message": "Run the daily S3 backup: bash /home/mani/kitty-data/scripts/backup.sh. If it prints SUCCESS, report to Telegram. If ERROR, send urgent alert.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 180
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771923600000
+        "nextRunAtMs": 1772010000000,
+        "lastRunAtMs": 1771923601318,
+        "lastStatus": "ok",
+        "lastDurationMs": 32841,
+        "consecutiveErrors": 0
       }
     },
     {
@@ -348,7 +418,7 @@
       "name": "traffic-analysis",
       "enabled": true,
       "createdAtMs": 1771898199949,
-      "updatedAtMs": 1771898199949,
+      "updatedAtMs": 1771898768858,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * 1"
@@ -363,7 +433,9 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
         "nextRunAtMs": 1772460000000
@@ -374,7 +446,7 @@
       "name": "youtube-topic",
       "enabled": true,
       "createdAtMs": 1771898201354,
-      "updatedAtMs": 1771898201354,
+      "updatedAtMs": 1771898770259,
       "schedule": {
         "kind": "cron",
         "expr": "0 10 * * 4"
@@ -389,7 +461,9 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
         "nextRunAtMs": 1772121600000
@@ -400,7 +474,7 @@
       "name": "youtube-presentation",
       "enabled": true,
       "createdAtMs": 1771898202823,
-      "updatedAtMs": 1771898202823,
+      "updatedAtMs": 1771898771680,
       "schedule": {
         "kind": "cron",
         "expr": "0 10 * * 5"
@@ -415,7 +489,9 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
         "nextRunAtMs": 1772208000000
@@ -426,7 +502,7 @@
       "name": "youtube-script",
       "enabled": true,
       "createdAtMs": 1771898204240,
-      "updatedAtMs": 1771898204240,
+      "updatedAtMs": 1771898773126,
       "schedule": {
         "kind": "cron",
         "expr": "0 10 * * 6"
@@ -441,7 +517,9 @@
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
         "nextRunAtMs": 1772294400000
@@ -452,7 +530,7 @@
       "name": "security-audit",
       "enabled": true,
       "createdAtMs": 1771898205682,
-      "updatedAtMs": 1771898205682,
+      "updatedAtMs": 1771898759055,
       "schedule": {
         "kind": "cron",
         "expr": "0 22 * * 0"
@@ -463,11 +541,13 @@
         "kind": "agentTurn",
         "message": "Run security audit: Check that gateway is bound to loopback only. Verify .env file permissions are 600. Verify Telegram allowlist has only James's ID. Check logs for unauthorized API calls. Report to Telegram.",
         "model": "openai/gpt-4o-mini",
-        "timeoutSeconds": 120
+        "timeoutSeconds": 300
       },
       "delivery": {
         "mode": "announce",
-        "channel": "last"
+        "channel": "telegram",
+        "to": "7591059860",
+        "bestEffort": true
       },
       "state": {
         "nextRunAtMs": 1772424000000
