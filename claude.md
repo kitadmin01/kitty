@@ -454,17 +454,17 @@ Close your personal Chrome browser. Use Firefox or Edge on the Windows host for 
 
 | Priority | Model | Use Case | Cost |
 |----------|-------|----------|------|
-| 1st | `ollama/qwen3:8b` | Heartbeats, likes, simple queries, log parsing, scheduled checks | **FREE** |
-| 2nd | `ollama/qwen2.5-coder:14b` | Script writing, skill creation, code fixes | **FREE** |
-| 3rd | `anthropic/claude-sonnet-4-5-20250929` | Content creation, complex analysis, email drafts, strategy | ~$3/1M input, $15/1M output |
-| 4th | `openai/gpt-4o` | Fallback if Claude is unavailable | ~$2.50/1M input, $10/1M output |
+| 1st | `ollama/qwen2.5:1.5b` | Heartbeats, chrome-restart, git-push, backup, twitter-post, security-audit, eod-summary | **FREE** (~2-5s) |
+| 2nd | `ollama/qwen2.5:3b` | Medium complexity tasks | **FREE** (~2-5 min) |
+| 3rd | `openai/gpt-4o` | LinkedIn posts, YouTube content, lead research | ~$2.50/1M input, $10/1M output |
+| 4th | `openai/gpt-4o-mini` | Fallback for medium tasks | ~$0.15/1M input |
 
 ### How Model Routing Works in Practice
 
 Kitty should ask herself before every task:
-1. Can Ollama handle this? → Use Ollama
-2. Does this need creative/analytical reasoning? → Use Claude Sonnet
-3. Is Claude down? → Use GPT-4o as fallback
+1. Is this a script-runner or simple reply? → Use `ollama/qwen2.5:1.5b`
+2. Does this need content creation or analysis? → Use `openai/gpt-4o`
+3. Default primary is `ollama/qwen2.5:1.5b`, fallbacks: `openai/gpt-4o-mini` → `openai/gpt-4o`
 
 ### Configuring Per-Task Models via Cron
 
@@ -895,85 +895,45 @@ Strategies Kitty should employ:
 
 ### Strategy
 
-1. **Post 5 tweets daily** about AnalyticKit, Web3, AI, blockchain
-2. **Like posts every 10 minutes** (related to Web3, crypto, blockchain, AI)
-3. **Use browser automation** (avoids expensive Twitter API — $100/month for Basic)
-4. **Goal**: 10K followers in one month
+Post 1 tweet per day via **Twitter API v2** (free tier, ~500 tweets/month limit).
+Browser automation was removed — it triggered account alerts and was unreliable.
 
-### Implementation via Browser
+### Implementation via Twitter API
 
-Twitter API costs:
-- Free tier: Write-only, 1,500 tweets/month, no reads
-- Basic tier: $100/month
-- Pro tier: $5,000/month
+**Script**: `/home/mani/kitty-data/scripts/post-twitter-api.cjs`
 
-**Recommendation: Use browser automation exclusively.** This avoids API costs entirely.
+The script reads the next unposted row from `/home/mani/kitty-data/tweets/tweets.xlsx` (columns: `tweet_text`, `Posted`), posts via Twitter API v2, and marks the row `Posted=yes`.
 
-```bash
-# Tweet 5 times daily — spread across the day
-openclaw cron add --name "tweet-1" \
-  --cron "0 8 * * *" \
-  --model "anthropic/claude-sonnet-4-5-20250929" \
-  --session isolated \
-  --message "Write and post a tweet about AnalyticKit or Web3 analytics via browser on https://x.com/analytic_kit. Include relevant hashtags. Make it engaging. Log it." \
-  --announce
-
-openclaw cron add --name "tweet-2" \
-  --cron "0 10 * * *" \
-  --model "ollama/qwen3:8b" \
-  --session isolated \
-  --message "Write and post a tweet sharing a Web3 industry insight via browser. Keep it concise and insightful. Log it." \
-  --announce
-
-openclaw cron add --name "tweet-3" \
-  --cron "0 13 * * *" \
-  --model "ollama/qwen3:8b" \
-  --session isolated \
-  --message "Write and post a tweet about AI + blockchain intersection via browser. Log it." \
-  --announce
-
-openclaw cron add --name "tweet-4" \
-  --cron "0 16 * * *" \
-  --model "ollama/qwen3:8b" \
-  --session isolated \
-  --message "Write and post a tweet about AnalyticKit features or a customer success angle via browser. Log it." \
-  --announce
-
-openclaw cron add --name "tweet-5" \
-  --cron "0 19 * * *" \
-  --model "anthropic/claude-sonnet-4-5-20250929" \
-  --session isolated \
-  --message "Write and post an engaging evening tweet. Could be a question, poll-style tweet, or hot take about Web3/crypto. Post via browser. Log it." \
-  --announce
-
-# Like posts every 10 minutes (6 AM to 11 PM)
-openclaw cron add --name "twitter-like" \
-  --cron "*/10 6-23 * * *" \
-  --model "ollama/qwen3:8b" \
-  --session isolated \
-  --message "Open Twitter via browser. Search for recent posts about web3 OR crypto OR blockchain OR AI OR DeFi. Like 3-5 relevant posts. Do NOT like spam or offensive content. Be quick and efficient. HEARTBEAT_OK if done." \
-  --announce
+**Required env vars** (in `/home/mani/.openclaw-dev/.env`):
+```
+TWITTER_API_KEY=...
+TWITTER_API_SECRET=...
+TWITTER_ACCESS_TOKEN=...
+TWITTER_ACCESS_TOKEN_SECRET=...
 ```
 
-### Tips to Reach 10K Followers Cheaply
+**Cron job**: `twitter-post` runs daily at 12:00 PM using `ollama/qwen2.5:1.5b` (timeout 300s).
+Job message: runs `node /home/mani/kitty-data/scripts/post-twitter-api.cjs` via exec.
 
-1. **Engage heavily**: Liking every 10 min is good. Also reply to popular tweets in Web3 space.
-2. **Quote tweet** popular accounts with insightful commentary
-3. **Use threads**: Write Twitter threads about Web3 topics (1 thread/week)
-4. **Participate in Twitter Spaces** about Web3 topics
-5. **Follow relevant accounts**: Follow Web3 influencers, projects, and communities (many will follow back)
-6. **Post at peak times**: 8-9 AM, 12-1 PM, 5-7 PM (US time zones)
-7. **Use trending hashtags**: Monitor Twitter Trending for relevant Web3 topics
-8. **Cross-promote**: Link tweets in LinkedIn posts and vice versa
-9. **Pin your best tweet** about AnalyticKit
-10. **Consistency**: 5 tweets/day + constant engagement > sporadic viral attempts
+### Twitter API Free Tier Limits
 
-**⚠️ Rate Limiting Warning**: Twitter may rate-limit or temporarily restrict accounts that like too aggressively. If Kitty detects a rate limit:
-- Reduce liking frequency to every 20-30 minutes
-- Spread actions more naturally
-- Report to Telegram immediately
+- ~500 tweets/month write (sufficient for 1 tweet/day = ~30/month)
+- No read access on free tier (no engagement/like automation)
+- No media upload on free tier (text-only tweets)
 
----
+### Adding New Tweets
+
+Add rows to `/home/mani/kitty-data/tweets/tweets.xlsx`:
+- Column `tweet_text`: The tweet content (max 280 chars)
+- Column `Posted`: Leave blank (script sets to `yes` after posting)
+
+### Tips
+
+- Keep tweets under 280 characters
+- Include 2-3 relevant hashtags (#Web3 #Blockchain #Analytics)
+- Mention @analytickit where natural
+- Cross-promote LinkedIn posts by referencing them in tweets
+
 
 ## 12. Task D — Telegram Command Interface
 
